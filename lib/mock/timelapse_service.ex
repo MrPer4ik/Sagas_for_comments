@@ -1,5 +1,5 @@
 defmodule Mock.Timelapse_service do
-    defstruct timelapse_exist: nil, state: nil
+    defstruct timelapse: nil, state: nil
   
     alias __MODULE__
   
@@ -15,6 +15,7 @@ defmodule Mock.Timelapse_service do
     def cancel(pid) do
       case Mock.Server.request(pid, :cancel) do
         {:ok, :canceled} -> {:ok, %Timelapse_service{timelapse: pid, state: :cancelled}}
+        {:error, :locked} -> {:error, {:timelapse, :locked}}
         {:error, :no_response} -> {:error, {:service, :no_response}}
       end
     end
