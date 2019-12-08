@@ -8,7 +8,7 @@ defmodule Mock.Timelapse_service do
         {:ok, :exists} -> {:ok, %Timelapse_service{timelapse: pid, state: :exists}}
         {:error, :deleted} -> {:error, {:timelapse, :deleted}}
         {:error, :locked} -> {:error, {:timelapse, :locked}}
-        {:error, :no_response} -> {:error, {:service, :no_response}}
+        {:error, :no_response} -> {:error, {:timelapse, :no_response}}
       end
     end
   
@@ -16,7 +16,7 @@ defmodule Mock.Timelapse_service do
       case Mock.Server.request(pid, :cancel) do
         {:ok, :canceled} -> {:ok, %Timelapse_service{timelapse: pid, state: :cancelled}}
         {:error, :locked} -> {:error, {:timelapse, :locked}}
-        {:error, :no_response} -> {:error, {:service, :no_response}}
+        {:error, :no_response} -> {:error, {:timelapse, :no_response}}
       end
     end
   end

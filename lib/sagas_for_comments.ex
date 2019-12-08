@@ -6,7 +6,7 @@ defmodule SagasForComments do
   """
   alias Mock.{Auth_service, Comments_service, Time_service, Timelapse_service}
 
-  def Create_Comment([auth_pid, timelapse_pid, time_pid, comment_pid]) do
+  def create_comment([auth_pid, timelapse_pid, time_pid, comment_pid]) do
     Sage.new()
     |> Sage.run_async(:user, &auth_transaction/2, &auth_compensation/4)
     |> Sage.run_async(:timelapse, &timelapse_transaction/2, &timelapse_compensation/4)
@@ -98,7 +98,7 @@ defmodule SagasForComments do
          _effect_to_compensate,
          _effects_so_far,
          {:error, {:service, :no_response}},
-         _attrs
+         %{timelapse_pid: timelapse_pid}
        ) do
     Logger.error(
       "Getting timestamp failure for timelapse_pid #{inspect(timelapse_pid)}. Service doesn't response."

@@ -1,0 +1,4 @@
+%{
+  "sage": {:hex, :sage, "0.4.0", "b244f17cd185536a3ead64bec7c728d4b4812ee8d1b2aa600b66a791f6f3c259", [:mix], [], "hexpm"},
+  "stream_data": {:hex, :stream_data, "0.4.3", "62aafd870caff0849a5057a7ec270fad0eb86889f4d433b937d996de99e3db25", [:mix], [], "hexpm"},
+}

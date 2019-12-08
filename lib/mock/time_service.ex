@@ -6,8 +6,8 @@ defmodule Mock.Time_service do
   
     def get_ts(pid) do
       case Mock.Server.request(pid, :get_ts) do
-        {:ok, :got} -> {:ok, %Time_service{timestamp: pid, state: :got}}
-        {:error, :no_response} -> {:error, {:service, :no_response}}
+        {:ok, :got} -> {:ok, %Time_service{get_timestamp: pid, state: :got}}
+        {:error, :no_response} -> {:error, {:timestamp, :no_response}}
       end
     end
   

@@ -7,8 +7,8 @@ defmodule Mock.Comments_service do
       case Mock.Server.request(pid, :create_comment) do
         {:ok, :created} -> {:ok, %Comments_service{comment: pid, state: :created}}
         {:error, :exists} -> {:error, {:comment, :exists}}
-        {:error, :locked} -> {:error, {:service, :locked}}
-        {:error, :no_response} -> {:error, {:service, :no_response}}
+        {:error, :locked} -> {:error, {:comment, :locked}}
+        {:error, :no_response} -> {:error, {:comment, :no_response}}
       end
     end
   
