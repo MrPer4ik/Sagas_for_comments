@@ -11,10 +11,10 @@ defmodule Mock.Time_service do
       end
     end
   
-    def cancel(pid) do
-      case Mock.Server.request(pid, :cancel) do
-        {:ok, :deleted} -> {:ok, %Time_service{timestamp: pid, state: :deleted}}
-        {:error, :no_response} -> {:error, {:service, :no_response}}
-      end
-    end
+    # def cancel(pid) do
+    #   case Mock.Server.request(pid, :cancel) do
+    #     {:ok, :deleted} -> {:ok, %Time_service{timestamp: pid, state: :deleted}}
+    #     {:error, :no_response} -> {:error, {:service, :no_response}}
+    #   end
+    # end
   end
