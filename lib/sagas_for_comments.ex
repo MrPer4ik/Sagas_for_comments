@@ -8,7 +8,7 @@ defmodule SagasForComments do
 
   def create_comment([auth_pid, timelapse_pid, time_pid, comment_pid]) do
     Sage.new()
-    |> Sage.run_async(:user, &auth_transaction/2, &auth_compensation/4)
+    |> Sage.run_async(:auth, &auth_transaction/2, &auth_compensation/4)
     |> Sage.run_async(:timelapse, &timelapse_transaction/2, &timelapse_compensation/4)
     |> Sage.run(:timestamp, &time_transaction/2, &time_compensation/4)
     |> Sage.run(:comment, &comment_transaction/2, &comment_compensation/4)
@@ -28,7 +28,7 @@ defmodule SagasForComments do
   end
 
   defp auth_compensation(
-         %Auth_service{verify_user: auth_pid, state: :verified},
+         %Auth_service{state: :verified, verify_user: auth_pid},
          _effects_so_far,
          _error,
          _attrs
@@ -38,7 +38,7 @@ defmodule SagasForComments do
         :abort
         IO.puts "Successfully cancel user verification for auth_pid #{inspect(auth_pid)}"
 
-      {:error, {:server, :no_response}} ->
+      {:error, {:auth, :no_response}} ->
         Logger.error(
           "Cancel user verification failure for auth_pid #{inspect(auth_pid)}. Service doesn't response."
         )
@@ -59,22 +59,22 @@ defmodule SagasForComments do
   end
 
   defp timelapse_compensation(
-         %Timelapse_service{timelapse: timelapse_pid, state: :exists},
+         %Timelapse_service{state: :exists, timelapse: timelapse_pid},
          _effects_so_far,
          _error,
          _attrs
        ) do
     case Timelapse_service.cancel(timelapse_pid) do
       {:ok, _canceled_tyres_order} ->
-        :abort
         IO.puts "Successful cancel timelapse verification for timelapse_pid #{inspect(timelapse_pid)}"
+        :abort
 
         {:error, {:timelapse, :locked}} ->
         Logger.error(
           "Cancel timelapse verification failure for timelapse_pid #{inspect(timelapse_pid)}. Service is locked by another process."
         )
 
-        {:error, {:service, :no_response}} ->
+        {:error, {:timelapse, :no_response}} ->
         Logger.error(
           "Cancel timelapse verification failure for timelapse_pid #{inspect(timelapse_pid)}. Service doesn't response."
         )
@@ -97,7 +97,7 @@ defmodule SagasForComments do
   defp time_compensation(
          _effect_to_compensate,
          _effects_so_far,
-         {:error, {:service, :no_response}},
+         {:error, {:timestamp, :no_response}},
          %{timelapse_pid: timelapse_pid}
        ) do
     Logger.error(
@@ -133,7 +133,7 @@ defmodule SagasForComments do
   defp comment_compensation(
         _effects_to_compensate,
         _effects_so_far,
-        {:error, {:service, :locked}},
+        {:error, {:comment, :locked}},
         %{timelapse_pid: timelapse_pid}
         ) do
     Logger.error(
@@ -145,7 +145,7 @@ defmodule SagasForComments do
   defp comment_compensation(
         _effects_to_compensate,
         _effects_so_far,
-        {:error, {:service, :no_response}},
+        {:error, {:comment, :no_response}},
         %{timelapse_pid: timelapse_pid}
         ) do
     Logger.error(
