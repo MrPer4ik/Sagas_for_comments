@@ -15,7 +15,9 @@ def deps do
 end
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/sagas_for_comments](https://hexdocs.pm/sagas_for_comments).
+To test working sagas you can run this command in prompt:
+
+```prompt
+> mix test
+```
 
