@@ -1,4 +1,6 @@
 %{
+  "kafka_ex": {:hex, :kafka_ex, "0.9.0", "d653b38f2584627965c71a118d9be69bf6bd3174d5f3dca29e071c928af2f53a", [:mix], [], "hexpm"},
   "sage": {:hex, :sage, "0.4.0", "b244f17cd185536a3ead64bec7c728d4b4812ee8d1b2aa600b66a791f6f3c259", [:mix], [], "hexpm"},
+  "snappy": {:git, "https://github.com/fdmanana/snappy-erlang-nif", "e8907ee8e37cfa07d933a070669a88798082c3d7", []},
   "stream_data": {:hex, :stream_data, "0.4.3", "62aafd870caff0849a5057a7ec270fad0eb86889f4d433b937d996de99e3db25", [:mix], [], "hexpm"},
 }
