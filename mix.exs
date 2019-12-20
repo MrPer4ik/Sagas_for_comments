@@ -14,6 +14,7 @@ defmodule SagasForComments.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
+      mod: {Saga.Application, []},
       extra_applications: [:logger]
     ]
   end
@@ -24,7 +25,9 @@ defmodule SagasForComments.MixProject do
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
       {:stream_data, "~> 0.1", only: :test},
-      {:sage, "~> 0.4.0"}
+      {:sage, "~> 0.4.0"}, 
+      {:grpc, github: "elixir-grpc/grpc"},
+      {:poison, "~> 3.1"}
     ]
   end
 end
