@@ -1,15 +1,27 @@
+defmodule Saga.Api.MyMessage do
+  @moduledoc false
+  use Protobuf, syntax: :proto3
+
+  @type t :: %__MODULE__{}
+  defstruct []
+end
+
 defmodule Saga.Api.Comment do
   @moduledoc false
   use Protobuf, syntax: :proto3
 
   @type t :: %__MODULE__{
           timelapse_id: String.t(),
-          body_comment: String.t()
+          body_comment: String.t(),
+          comment_id: String.t(),
+          timestamp: Google.Protobuf.Timestamp.t() | nil
         }
-  defstruct [:timelapse_id, :body_comment]
+  defstruct [:timelapse_id, :body_comment, :comment_id, :timestamp]
 
   field :timelapse_id, 1, type: :string
   field :body_comment, 2, type: :string
+  field :comment_id, 3, type: :string
+  field :timestamp, 4, type: Google.Protobuf.Timestamp
 end
 
 defmodule Saga.Api.Response do
