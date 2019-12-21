@@ -1,4 +1,5 @@
 %{
+  "gen_state_machine": {:hex, :gen_state_machine, "2.0.5", "9ac15ec6e66acac994cc442dcc2c6f9796cf380ec4b08267223014be1c728a95", [:mix], [], "hexpm"},
   "kafka_ex": {:hex, :kafka_ex, "0.9.0", "d653b38f2584627965c71a118d9be69bf6bd3174d5f3dca29e071c928af2f53a", [:mix], [], "hexpm"},
   "sage": {:hex, :sage, "0.4.0", "b244f17cd185536a3ead64bec7c728d4b4812ee8d1b2aa600b66a791f6f3c259", [:mix], [], "hexpm"},
   "snappy": {:git, "https://github.com/fdmanana/snappy-erlang-nif", "e8907ee8e37cfa07d933a070669a88798082c3d7", []},

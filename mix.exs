@@ -31,7 +31,8 @@ defmodule SagasForComments.MixProject do
       {:sage, "~> 0.4.0"},
       {:kafka_ex, "~> 0.9.0"},
       # if using snappy compression
-      {:snappy, git: "https://github.com/fdmanana/snappy-erlang-nif"}
+      {:snappy, git: "https://github.com/fdmanana/snappy-erlang-nif"}, 
+      {:gen_state_machine, "~> 2.0"}
     ]
   end
 end
