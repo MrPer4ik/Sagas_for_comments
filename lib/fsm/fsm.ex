@@ -43,7 +43,7 @@ defmodule Sagas.Comment do
 
     def answer_timelapse do
         KafkaEx.produce(Kafka.Topics.a_timelapse_verification, 0 , "{\"answer\": \"Timelapse verified\"}") #mock answer
-        # KafkaEx.produce(Kafka.Topics.a_timelapse_verification, 0 , "{\"answer\": \"Timelapse isn`t verified\"}")
+        #KafkaEx.produce(Kafka.Topics.a_timelapse_verification, 0 , "{\"answer\": \"Timelapse isn`t verified\"}")
         res = KafkaEx.fetch(Kafka.Topics.a_timelapse_verification, 0)
         answer = List.to_tuple(List.first(List.first(res).partitions).message_set)
         size = tuple_size(answer)
@@ -71,7 +71,7 @@ defmodule Sagas.Comment do
     end
 
     def answer_comment do
-        KafkaEx.produce(Kafka.Topics.a_create_comment, 0 , "{\"answer\": \"Comment create\"}") # mock answer
+        KafkaEx.produce(Kafka.Topics.a_create_comment, 0 , "{\"answer\": \"Comment created\"}") # mock answer
         # KafkaEx.produce(Kafka.Topics.a_create_comment, 0 , "{\"answer\": \"\"}")
         res = KafkaEx.fetch(Kafka.Topics.a_create_comment, 0)
         answer = List.to_tuple(List.first(List.first(res).partitions).message_set)

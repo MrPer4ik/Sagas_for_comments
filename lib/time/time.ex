@@ -13,14 +13,14 @@ defmodule Time.Microservice do
         channel = create_channel()
         {:ok, reply} = channel |> TimeMicroservice.Stub.get_time(requset)
         res = Enum.to_list(reply)
-      |> Enum.map(&(elem(&1, 1)))
+        |> Enum.map(&(elem(&1, 1)))
 
-      GRPC.Stub.disconnect(channel)
-      res
+        GRPC.Stub.disconnect(channel)
+        res
       end
 
       defp create_channel() do
-        {:ok, channel} = GRPC.Stub.connect("localhost:50051")
+        {:ok, channel} = GRPC.Stub.connect("localhost:50052")
         channel
       end
 
