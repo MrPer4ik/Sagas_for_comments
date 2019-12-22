@@ -1,14 +1,14 @@
-# defmodule Time.Server do
+defmodule Time.Server do
 
-#   alias Time.Api.{
-#     Comment,
-#     Response,
-#   }
+  alias Time.Api.{
+    Response,
+    TimeMicroservice
+  }
 
-#   use GRPC.Server, service: EnvoyRequest.Service
+  use GRPC.Server, service: TimeMicroservice.Service
 
-#   @spec verify_comment(Saga.Api.Comment.t, GRPC.Server.Stream.t) :: Saga.Api.Response.t
-#   def get_time(request, _stream) do
-#     Response.new(timestamp: [ Google.Protobuf.Timestamp])
-#   end
-# end
+  def get_time(request, _stream) do
+    time = Response.new(timestamp: "2019.12.22 13:55:30")
+    # GRPC.Server.send_reply(stream, time)
+  end
+end

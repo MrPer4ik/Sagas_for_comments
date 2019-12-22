@@ -14,14 +14,14 @@ defmodule Saga.Api.Comment do
           timelapse_id: String.t(),
           body_comment: String.t(),
           comment_id: String.t(),
-          timestamp: Google.Protobuf.Timestamp.t() | nil
+          timestamp: String.t()
         }
   defstruct [:timelapse_id, :body_comment, :comment_id, :timestamp]
 
   field :timelapse_id, 1, type: :string
   field :body_comment, 2, type: :string
   field :comment_id, 3, type: :string
-  field :timestamp, 4, type: Google.Protobuf.Timestamp
+  field :timestamp, 4, type: :string
 end
 
 defmodule Saga.Api.Response do

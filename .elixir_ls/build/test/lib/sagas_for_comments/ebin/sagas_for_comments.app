@@ -13,7 +13,10 @@
                         'Elixir.Time.Api.Response',
                         'Elixir.Time.Api.TimeMicroservice.Service',
                         'Elixir.Time.Api.TimeMicroservice.Stub',
-                        'Elixir.Time.Microservice','Elixir.User']},
+                        'Elixir.Time.Microservice',
+                        'Elixir.Time.Microservice.Application',
+                        'Elixir.Time.Microservice.Endpoint',
+                        'Elixir.Time.Server','Elixir.User']},
               {registered,[]},
               {vsn,"0.1.0"},
               {mod,{'Elixir.Saga.Application',[]}}]}.

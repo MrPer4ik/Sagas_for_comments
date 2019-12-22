@@ -5,16 +5,18 @@ defmodule Time.Microservice do
   """
     require Logger
 
-      alias Saga.Api.{
-        EnvoyRequest
+      alias Time.Api.{
+        TimeMicroservice
       }
 
-      # use GenStateMachine
-
-      def verify_comment(requset) do
+      def get_time(requset) do
         channel = create_channel()
-        {:ok, reply} = channel |> EnvoyRequest.Stub.verify_comment(requset)
-        reply
+        {:ok, reply} = channel |> TimeMicroservice.Stub.get_time(requset)
+        res = Enum.to_list(reply)
+      |> Enum.map(&(elem(&1, 1)))
+
+      GRPC.Stub.disconnect(channel)
+      res
       end
 
       defp create_channel() do

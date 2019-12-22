@@ -4,7 +4,7 @@ defmodule Sagas.Comment do
 
     #API Client
     def start_link do
-        GenStateMachine.start_link(__MODULE__, {:verification_timelapse, []})
+        GenStateMachine.start_link(__MODULE__, {:verification_timelapse, {:verification_timelapse, []}})
     end
 
     def timelapse_exists(pid, comment) do
@@ -19,6 +19,10 @@ defmodule Sagas.Comment do
         GenStateMachine.cast(pid, {:created_comment, comment})
     end
 
+    def get_data(pid) do
+        GenStateMachine.call(pid, :get_data)
+    end
+
     def stop(pid) do
         GenStateMachine.stop(pid)
     end
@@ -31,9 +35,12 @@ defmodule Sagas.Comment do
         res = answer_timelapse()
         case res do
             "ok" -> {:next_state, :getting_time, {:getting_time, comment}}
-            "no" -> {:next_state, :error, {:error, comment}}
+            "no" -> {:next_state, :error, {:error, "Not  exists timelapse"}}
         end
-        # {:next_state, :getting_time, {:getting_time, comment}}
+    end
+
+    def verification_timelapse(event_type, event_content, data) do
+        handle_event(event_type, event_content, data)
     end
 
     def answer_timelapse do
@@ -54,26 +61,33 @@ defmodule Sagas.Comment do
     end
 
 
-    def getting_time(:cast, {:got_time, comment}, _loop_data) do
-        {:next_state, :creating_comment, comment}
+    def getting_time(:cast, {:got_time, comment},  {:getting_time, comment}) do
+        {:next_state, :creating_comment, {:creating_comment, comment}}
     end
 
+    def getting_time(event_type, event_content, data) do
+        handle_event(event_type, event_content, data)
+    end
     # def getting_time(:cast, {:not_got_time, comment}, _loop_data) do
     #     {:next_state, :error, comment}
     # end
 
-    def creating_comment(:cast, {:created_comment, comment}, loop_data) do
-        result = Poison.encode!(loop_data)
+    def creating_comment(:cast, {:created_comment, comment}, {:creating_comment, comment}) do
+        result = Poison.encode!(comment)
         KafkaEx.produce(Kafka.Topics.create_comment, 0, result)
         res = answer_comment()
         case res do
             "ok" -> {:next_state, :comment_added, {:comment_added, comment}}
-            "no" -> {:next_state, :error, {:error, comment}}
+            "no" -> {:next_state, :error, {:error, "Error creating comment"}}
         end
     end
 
+    def creating_comment(event_type, event_content, data) do
+        handle_event(event_type, event_content, data)
+    end
+
     def answer_comment do
-        KafkaEx.produce(Kafka.Topics.a_create_comment, 0 , "{\"answer\": \"ok\"}")
+        KafkaEx.produce(Kafka.Topics.a_create_comment, 0 , "{\"answer\": \"no\"}")
         res = KafkaEx.fetch(Kafka.Topics.a_create_comment, 0)
         answer = List.to_tuple(List.first(List.first(res).partitions).message_set)
         size = tuple_size(answer)
@@ -88,5 +102,18 @@ defmodule Sagas.Comment do
         decode = Poison.decode!(value.value, as: %{answer: answer})
         decode["answer"]
     end
+
+
+  def comment_added(event_type, event_content, data) do
+    handle_event(event_type, event_content, data)
+  end
+
+  def error(event_type, event_content, data) do
+    handle_event(event_type, event_content, data)
+  end
+
+  def handle_event({:call, from}, :get_data, data) do
+    {:keep_state_and_data, [{:reply, from, data}]}
+  end
 
 end
