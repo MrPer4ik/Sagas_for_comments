@@ -1,7 +1,6 @@
 defmodule Saga.Server do
 
     alias Saga.Api.{
-      Comment,
       Response,
       EnvoyRequest
     }
@@ -11,6 +10,7 @@ defmodule Saga.Server do
     @spec verify_comment(Saga.Api.Comment.t, GRPC.Server.Stream.t) :: Saga.Api.Response.t
     def verify_comment(request, stream) do
       {:ok, pid} = Sagas.Comment.start_link
+      request = Saga.Api.Comment.new(timelapse_id: request.timelapse_id, author_id: request.author_id, uuid: inspect(pid), comment: request.comment)
       Sagas.Comment.timelapse_exists(pid, request)
       case Sagas.Comment.get_data(pid) do
         {:getting_time, comment} -> Sagas.Comment.got_time(pid, request)
@@ -25,7 +25,7 @@ defmodule Saga.Server do
         {:error, message} -> {:error, Sagas.Comment.stop(pid), message}
       end
      response = case res do
-        {:ok, comment} -> Response.new(comment: [comment], res_message: "ok")
+        {:ok, comment} -> Response.new(comment: [comment], res_message: "Comment created")
         {:error, :ok, message} ->  Response.new(comment: [], res_message: message)
       end
 

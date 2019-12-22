@@ -5,7 +5,6 @@
                         'Elixir.Kafka.Topics','Elixir.Saga.Api.Comment',
                         'Elixir.Saga.Api.EnvoyRequest.Service',
                         'Elixir.Saga.Api.EnvoyRequest.Stub',
-                        'Elixir.Saga.Api.MyMessage',
                         'Elixir.Saga.Api.Response','Elixir.Saga.Application',
                         'Elixir.Saga.Endpoint','Elixir.Saga.Server',
                         'Elixir.Sagas.Comment','Elixir.Time.Api.Comment',

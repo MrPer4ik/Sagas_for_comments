@@ -22,6 +22,6 @@ erl_crash.dump
 # Ignore package tarball (built via "mix hex.build").
 sagas_for_comments-*.tar
 
-/.elixir_ls
+.elixir_ls
 
 /.gitignore

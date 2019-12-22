@@ -1,22 +1,13 @@
-// PATH=$PATH:/home/alexander/.mix/escripts/
-// protoc --elixir_out=plugins=grpc:./ ./apps/categories/lib/categories/api_mobile/*.proto
-
 syntax = "proto3";
-
-// option java_multiple_files = true;
-import "google/protobuf/timestamp.proto";
-
-message MyMessage {
-    
-}
 
 package saga.api;
 
 message Comment {
-  string timelapse_id = 1;
-  string body_comment = 2;
-  string comment_id = 3;
-  string timestamp = 4;
+  string uuid = 1;
+  string timelapse_id = 2;
+  string author_id = 3;
+  string comment = 4;
+  string timestamp = 5;
 }
 
 message Response {

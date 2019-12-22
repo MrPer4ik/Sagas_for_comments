@@ -7,8 +7,9 @@ defmodule Time.Server do
 
   use GRPC.Server, service: TimeMicroservice.Service
 
-  def get_time(request, _stream) do
-    time = Response.new(timestamp: "2019.12.22 13:55:30")
-    # GRPC.Server.send_reply(stream, time)
+  @spec get_time(Time.Api.Comment.t, GRPC.Server.Stream.t) :: Time.Api.Response.t
+  def get_time(_request, stream) do
+    time = Response.new(timestamp: "1577015883 seconds since Jan 01 1970. (UTC)")
+    GRPC.Server.send_reply(stream, time)
   end
 end

@@ -1,27 +1,21 @@
-defmodule Saga.Api.MyMessage do
-  @moduledoc false
-  use Protobuf, syntax: :proto3
-
-  @type t :: %__MODULE__{}
-  defstruct []
-end
-
 defmodule Saga.Api.Comment do
   @moduledoc false
   use Protobuf, syntax: :proto3
 
   @type t :: %__MODULE__{
+          uuid: String.t(),
           timelapse_id: String.t(),
-          body_comment: String.t(),
-          comment_id: String.t(),
+          author_id: String.t(),
+          comment: String.t(),
           timestamp: String.t()
         }
-  defstruct [:timelapse_id, :body_comment, :comment_id, :timestamp]
+  defstruct [:uuid, :timelapse_id, :author_id, :comment, :timestamp]
 
-  field :timelapse_id, 1, type: :string
-  field :body_comment, 2, type: :string
-  field :comment_id, 3, type: :string
-  field :timestamp, 4, type: :string
+  field :uuid, 1, type: :string
+  field :timelapse_id, 2, type: :string
+  field :author_id, 3, type: :string
+  field :comment, 4, type: :string
+  field :timestamp, 5, type: :string
 end
 
 defmodule Saga.Api.Response do
