@@ -1,5 +1,7 @@
 use Mix.Config
 
+config :grpc, start_server: true
+
 config :kafka_ex,
   brokers: [
     {"localhost", 9092},

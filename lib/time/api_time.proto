@@ -1,0 +1,29 @@
+// PATH=$PATH:/home/alexander/.mix/escripts/
+// protoc --elixir_out=plugins=grpc:./ ./apps/categories/lib/categories/api_mobile/*.proto
+
+syntax = "proto3";
+
+// option java_multiple_files = true;
+import "google/protobuf/timestamp.proto";
+
+message MyMessage {
+    
+}
+
+package time.api;
+
+
+message Comment {
+    string timelapse_id = 1;
+    string body_comment = 2;
+    string comment_id = 3;
+    google.protobuf.Timestamp timestamp = 4;
+  }
+
+message Response {
+    google.protobuf.Timestamp timestamp = 1;
+}
+
+service TimeMicroservice {
+  rpc get_time(Comment) returns (stream Response) {};
+}
