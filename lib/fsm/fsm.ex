@@ -40,10 +40,13 @@ defmodule Sagas.Comment do
         end
     end
 
+    def verification_timelapse(event_type, event_content, data) do
+        handle_event(event_type, event_content, data)
+    end
+
 
     def answer_timelapse do
-        KafkaEx.produce(Kafka.Topics.a_timelapse_verification, 0 , "{\"answer\": \"Timelapse verified\"}") #mock answer
-        #KafkaEx.produce(Kafka.Topics.a_timelapse_verification, 0 , "{\"answer\": \"Timelapse isn`t verified\"}")
+        #Kafka.Mock_answers.produce(Kafka.Topics.a_timelapse_verification, "{\"answer\": \"Timelapse verified\"}")
         res = KafkaEx.fetch(Kafka.Topics.a_timelapse_verification, 0)
         answer = List.to_tuple(List.first(List.first(res).partitions).message_set)
         size = tuple_size(answer)
@@ -59,20 +62,23 @@ defmodule Sagas.Comment do
         decode["answer"]
     end
 
-    def creating_comment(:cast, {:created_comment, comment}, {:creating_comment, comment}) do
-        result = Poison.encode!(comment)
+    def creating_comment(:cast, {:created_comment, _comment}, {:creating_comment, data}) do
+        result = Poison.encode!(data)
         KafkaEx.produce(Kafka.Topics.create_comment, 0, result)
         res = answer_comment()
         case res do
-            "Comment created" -> {:next_state, :comment_added, {:comment_added, comment}}
+            "Comment created" -> {:next_state, :comment_added, {:comment_added, data}}
             "Comment isn`t created" -> {:next_state, :error, {:error, "Comment isn`t created"}}
             _ -> {:next_state, :error, {:error, "Unrecognised response"}}
         end
     end
 
+    def creating_comment(event_type, event_content, data) do
+        handle_event(event_type, event_content, data)
+    end
+
     def answer_comment do
-        KafkaEx.produce(Kafka.Topics.a_create_comment, 0 , "{\"answer\": \"Comment created\"}") # mock answer
-        # KafkaEx.produce(Kafka.Topics.a_create_comment, 0 , "{\"answer\": \"\"}")
+        #Kafka.Mock_answers.produce(Kafka.Topics.a_create_comment, "{\"answer\": \"Comment created\"}")
         res = KafkaEx.fetch(Kafka.Topics.a_create_comment, 0)
         answer = List.to_tuple(List.first(List.first(res).partitions).message_set)
         size = tuple_size(answer)
@@ -88,20 +94,18 @@ defmodule Sagas.Comment do
         decode["answer"]
     end
 
-    # States
-    def verification_timelapse(event_type, event_content, data) do
-        handle_event(event_type, event_content, data)
-    end
 
-    def getting_time(:cast, {:got_time, comment},  {:getting_time, comment}) do
-        {:next_state, :creating_comment, {:creating_comment, comment}}
+    def getting_time(:cast, {:got_time, comment},  {:getting_time, _data}) do
+        {:ok, channel} = GRPC.Stub.connect("localhost:50051")
+        {:ok, reply} = channel |> Saga.Api.EnvoyRequest.Stub.get_time(comment)
+        res = Enum.to_list(reply)
+        |> Enum.map(&(elem(&1, 1)))
+        [h | _t] = res
+        new_comment = Saga.Api.Comment.new(timelapse_id: comment.timelapse_id, author_id: comment.author_id, uuid: comment.uuid, comment: comment.comment, timestamp: h.timestamp)
+        {:next_state, :creating_comment, {:creating_comment, new_comment}}
     end
 
     def getting_time(event_type, event_content, data) do
-        handle_event(event_type, event_content, data)
-    end
-
-    def creating_comment(event_type, event_content, data) do
         handle_event(event_type, event_content, data)
     end
 

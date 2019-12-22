@@ -15,6 +15,17 @@ message Response {
   string res_message = 2;
 }
 
+message ResponseTime {
+  string timestamp = 1;
+}
+
 service EnvoyRequest {
   rpc VerifyComment(Comment) returns (stream Response) {};
+  rpc get_time(Comment) returns (stream ResponseTime) {};
+}
+
+
+
+service TimeMicroservice {
+rpc get_time(Comment) returns (stream ResponseTime) {};
 }

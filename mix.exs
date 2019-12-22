@@ -11,7 +11,6 @@ defmodule SagasForComments.MixProject do
     ]
   end
 
-  # Run "mix help compile.app" to learn about applications.
   def application do
     [
       mod: {Saga.Application, []},
@@ -22,7 +21,6 @@ defmodule SagasForComments.MixProject do
     ]
   end
 
-  # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
       {:kafka_ex, "~> 0.9.0"},

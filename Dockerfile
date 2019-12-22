@@ -17,4 +17,4 @@ RUN mix deps.get && mix deps.compile
 
 # ENTRYPOINT ["iex", "-S", "mix"]
 
-CMD [ "mix", "test" ]
+CMD [ "mix", "run" ]

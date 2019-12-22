@@ -2,7 +2,8 @@ defmodule Saga.Server do
 
     alias Saga.Api.{
       Response,
-      EnvoyRequest
+      EnvoyRequest,
+      ResponseTime
     }
 
     use GRPC.Server, service: EnvoyRequest.Service
@@ -13,11 +14,11 @@ defmodule Saga.Server do
       request = Saga.Api.Comment.new(timelapse_id: request.timelapse_id, author_id: request.author_id, uuid: inspect(pid), comment: request.comment)
       Sagas.Comment.timelapse_exists(pid, request)
       case Sagas.Comment.get_data(pid) do
-        {:getting_time, comment} -> Sagas.Comment.got_time(pid, request)
+        {:getting_time, _comment} -> Sagas.Comment.got_time(pid, request)
         {:error, message} -> {:error, message}
       end
       case Sagas.Comment.get_data(pid) do
-        {:creating_comment, comment} -> Sagas.Comment.created_comment(pid, request)
+        {:creating_comment, _comment} -> Sagas.Comment.created_comment(pid, request)
         {:error, message} -> {:error, message}
       end
      res =  case Sagas.Comment.get_data(pid) do
@@ -30,5 +31,9 @@ defmodule Saga.Server do
       end
 
       GRPC.Server.send_reply(stream, response)
+    end
+    def get_time(_request, stream) do
+      time = ResponseTime.new(timestamp: "1577015883 seconds since Jan 01 1970. (UTC)")
+      GRPC.Server.send_reply(stream, time)
     end
   end

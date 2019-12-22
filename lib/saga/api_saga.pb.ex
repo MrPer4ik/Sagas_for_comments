@@ -32,14 +32,39 @@ defmodule Saga.Api.Response do
   field :res_message, 2, type: :string
 end
 
+defmodule Saga.Api.ResponseTime do
+  @moduledoc false
+  use Protobuf, syntax: :proto3
+
+  @type t :: %__MODULE__{
+          timestamp: String.t()
+        }
+  defstruct [:timestamp]
+
+  field :timestamp, 1, type: :string
+end
+
 defmodule Saga.Api.EnvoyRequest.Service do
   @moduledoc false
   use GRPC.Service, name: "saga.api.EnvoyRequest"
 
   rpc :VerifyComment, Saga.Api.Comment, stream(Saga.Api.Response)
+  rpc :get_time, Saga.Api.Comment, stream(Saga.Api.ResponseTime)
 end
 
 defmodule Saga.Api.EnvoyRequest.Stub do
   @moduledoc false
   use GRPC.Stub, service: Saga.Api.EnvoyRequest.Service
+end
+
+defmodule Saga.Api.TimeMicroservice.Service do
+  @moduledoc false
+  use GRPC.Service, name: "saga.api.TimeMicroservice"
+
+  rpc :get_time, Saga.Api.Comment, stream(Saga.Api.ResponseTime)
+end
+
+defmodule Saga.Api.TimeMicroservice.Stub do
+  @moduledoc false
+  use GRPC.Stub, service: Saga.Api.TimeMicroservice.Service
 end
