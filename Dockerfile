@@ -15,6 +15,4 @@ RUN mix deps.clean mime --build
 
 RUN mix deps.get && mix deps.compile
 
-# ENTRYPOINT ["iex", "-S", "mix"]
-
-CMD [ "mix", "run" ]
+CMD [ "mix", "test" ]

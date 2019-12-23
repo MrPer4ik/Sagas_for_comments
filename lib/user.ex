@@ -1,15 +1,10 @@
 defmodule User do
 
-@moduledoc """
-Documentation for SagasForComments comes here.
-"""
   require Logger
 
     alias Saga.Api.{
       EnvoyRequest
     }
-
-    # use GenStateMachine
 
     def verify_comment(requset) do
       channel = create_channel()

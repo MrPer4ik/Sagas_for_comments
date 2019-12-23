@@ -24,8 +24,6 @@ service EnvoyRequest {
   rpc get_time(Comment) returns (stream ResponseTime) {};
 }
 
-
-
 service TimeMicroservice {
 rpc get_time(Comment) returns (stream ResponseTime) {};
 }

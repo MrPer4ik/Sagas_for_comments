@@ -2,7 +2,6 @@ defmodule Sagas.Comment do
 
     use GenStateMachine, callback_mode: :state_functions
 
-    # Events
     def start_link do
         GenStateMachine.start_link(__MODULE__, {:verification_timelapse, {:verification_timelapse, []}})
     end
@@ -46,7 +45,6 @@ defmodule Sagas.Comment do
 
 
     def answer_timelapse do
-        #Kafka.Mock_answers.produce(Kafka.Topics.a_timelapse_verification, "{\"answer\": \"Timelapse verified\"}")
         res = KafkaEx.fetch(Kafka.Topics.a_timelapse_verification, 0)
         answer = List.to_tuple(List.first(List.first(res).partitions).message_set)
         size = tuple_size(answer)
@@ -78,7 +76,6 @@ defmodule Sagas.Comment do
     end
 
     def answer_comment do
-        #Kafka.Mock_answers.produce(Kafka.Topics.a_create_comment, "{\"answer\": \"Comment created\"}")
         res = KafkaEx.fetch(Kafka.Topics.a_create_comment, 0)
         answer = List.to_tuple(List.first(List.first(res).partitions).message_set)
         size = tuple_size(answer)
