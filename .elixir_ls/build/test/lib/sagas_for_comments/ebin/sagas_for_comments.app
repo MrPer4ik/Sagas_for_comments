@@ -1,5 +1,6 @@
 {application,sagas_for_comments,
-             [{applications,[kernel,stdlib,elixir,logger,kafka_ex,grpc]},
+             [{applications,[kernel,stdlib,elixir,logger,kafka_ex,grpc,
+                             gen_state_machine,poison]},
               {description,"sagas_for_comments"},
               {modules,['Elixir.ConsumerGroup','Elixir.ExampleGenConsumer',
                         'Elixir.Kafka.Mock_answers','Elixir.Kafka.Topics',

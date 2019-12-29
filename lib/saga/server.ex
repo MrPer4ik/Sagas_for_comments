@@ -37,7 +37,7 @@ defmodule Saga.Server do
     GRPC.Server.send_reply(stream, response)
   end
   def get_time(_request, stream) do
-    time = ResponseTime.new(timestamp: "1577015883 seconds since Jan 01 1970. (UTC)")
+    time = ResponseTime.new(timestamp: "1577015883")
     GRPC.Server.send_reply(stream, time)
   end
 end

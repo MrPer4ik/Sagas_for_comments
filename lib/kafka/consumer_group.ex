@@ -10,8 +10,8 @@ defmodule ConsumerGroup do
       ]
 
       gen_consumer_impl = ExampleGenConsumer
-      consumer_group_name = "example_group"
-      topic_names = ["example_topic"]
+      consumer_group_name = "group_saga"
+      topic_names = [Kafka.Topics.timelapse_verification, Kafka.Topics.a_timelapse_verification, Kafka.Topics.create_comment, Kafka.Topics.a_create_comment]
 
       children = [
         supervisor(

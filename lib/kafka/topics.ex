@@ -8,10 +8,10 @@ defmodule Kafka.Topics do
   end
 
   def create_comment do
-    "new_comment"
+    "create_comment"
   end
 
   def a_create_comment do
-    "a_new_comment"
+    "a_create_comment"
   end
 end
