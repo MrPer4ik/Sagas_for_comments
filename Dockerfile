@@ -1,6 +1,5 @@
 FROM elixir:1.9.1-alpine as builder
 
-LABEL company="Pharos Production Inc."
 LABEL version="0.1.0"
 
 ENV LANG C.UTF-8 \
@@ -33,7 +32,6 @@ RUN rm -rf /opt/server-builder
 
 FROM alpine:3.9
 
-LABEL company="Pharos Production Inc."
 LABEL version="0.1.0"
 
 ENV LANG C.UTF-8 \
