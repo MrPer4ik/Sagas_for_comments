@@ -95,10 +95,9 @@ defmodule Sagas.Comment do
 
 
     def getting_time(:cast, {:got_time, comment},  {:getting_time, _data}) do
-        {:ok, channel} = GRPC.Stub.connect("localhost:50051")
+        {:ok, channel} = GRPC.Stub.connect("172.17.0.2:50051")
         {:ok, reply} = channel |> Saga.Api.EnvoyRequest.Stub.get_time(comment)
-        res = Enum.to_list(reply)
-        |> Enum.map(&(elem(&1, 1)))
+        res = Enum.to_list(reply) |> Enum.map(&(elem(&1, 1)))
         [h | _t] = res
         new_comment = Saga.Api.Comment.new(timelapse_id: comment.timelapse_id, author_id: comment.author_id, uuid: comment.uuid, comment: comment.comment, timestamp: h.timestamp)
         {:next_state, :creating_comment, {:creating_comment, new_comment}}
