@@ -17,7 +17,7 @@ defmodule User do
     end
 
     defp create_channel() do
-      {:ok, channel} = GRPC.Stub.connect("localhost:50051")
+      {:ok, channel} = GRPC.Stub.connect("172.17.0.2:50051")
       channel
     end
 
